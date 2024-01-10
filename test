@@ -5,50 +5,49 @@ require("../layouts/_plugin.php");
 $uername = $_POST['txtusername'];
 $password = $_POST['txtpassword'];
 
+// Check Employees table
 $sql = "SELECT * FROM `Employees` WHERE `Emp_username` = '" . $uername . "' AND `Emp_password` = '" . $password . "'";
 $result = mysqli_query($conn, $sql);
 
 if ($result) {
-    $count = 0;
-    while ($User = mysqli_fetch_assoc($result)) {
+    $count = mysqli_num_rows($result);
+
+    if ($count > 0) {
+        $User = mysqli_fetch_assoc($result);
         $_SESSION["Emp_name"] = $User['Emp_name'];
         $_SESSION["Emp_id"] = $User['Emp_id'];
         $_SESSION["Emp_position"] = $User['Emp_position'];
-        $count++;
-    }
 
-    if ($count > 0) {
         insertlog();
-        header("location: /$projectName/homepage.php"); // ไปยังหน้าหลัก
+        header("location: /$projectName/homepage.php");
         exit();
     }
 }
 
-// ถ้าไม่สำเร็จหรือไม่พบข้อมูลใน Employees ให้ทำต่อไปกับ Members
+// Check Members table
 $sql = "SELECT * FROM `Members` WHERE `Member_username` = '" . $uername . "' AND `Member_password` = '" . $password . "'";
 $result = mysqli_query($conn, $sql);
 
 if ($result) {
-    $countMem = 0;
-    while ($mem = mysqli_fetch_assoc($result)) {
+    $countMem = mysqli_num_rows($result);
+
+    if ($countMem > 0) {
+        $mem = mysqli_fetch_assoc($result);
         $_SESSION["Emp_name"] = $mem['Member_name'];
         $_SESSION["Emp_id"] = $mem['Member_id'];
         $_SESSION["Emp_position"] = 'M';
-        $countMem++;
-    }
 
-    if ($countMem > 0) {
         insertlog();
-        header("location: /$projectName/homepage.php"); // ไปยังหน้าหลัก
+        header("location: /$projectName/homepage.php");
         exit();
     }
 }
 
-// ถ้าไม่พบข้อมูลใน Members แสดงว่า username หรือ password ไม่ถูกต้อง
+// If no matching records found
 echo "<script>
     alert('Username หรือ Password ไม่ถูกต้อง\\n\\n\\nกรุณาลองใหม่อีกครั้ง!!');
     window.location.href='/$projectName/pages/manage_login/login_form.php';
-    </script>";
+</script>";
 
 $conn->close();
 
