@@ -1,16 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple Web Page</title>
-</head>
-<body>
-
 <?php
-    $message = "สวัสดี, สวีทย์!";
-    echo "<h1>$message</h1>";
-?>
+require("../../_conn.php");
+require("../layouts/_plugin.php");
 
-</body>
-</html>
+$uername = $_POST['txtusername'];
+$password = $_POST['txtpassword'];
+
+$sql = "SELECT * FROM `Employees` WHERE `Emp_username` = '" . $uername . "' AND `Emp_password` = '" . $password . "'";
+$result = mysqli_query($conn, $sql);
+
+$count = 0;
+$countMem = 0;
+
+while ($User = mysqli_fetch_assoc($result)) {
+    $_SESSION["Emp_name"] = $User['Emp_name'];
+    $_SESSION["Emp_id"] = $User['Emp_id'];
+    $_SESSION["Emp_position"] = $User['Emp_position'];
+    $count++;
+}
+
+if ($count > 0) {
+    insertlog();
+    header("location: /$projectName/homepage.php"); // ไปยังหน้าหลัก
+} else {
+    $sql = "SELECT * FROM `Members` WHERE `Member_username` = '" . $uername . "' AND `Member_password` = '" . $password . "'";
+    $result = mysqli_query($conn, $sql);
+
+    while ($mem = mysqli_fetch_assoc($result)) {
+        $_SESSION["Emp_name"] = $mem['Member_name'];
+        $_SESSION["Emp_id"] = $mem['Member_id'];
+        $_SESSION["Emp_position"] = 'M';
+        $countMem++;
+    }
+
+    if ($countMem > 0) {
+        insertlog();
+        header("location: /$projectName/homepage.php"); // ไปยังหน้าหลัก
+    } else {
+        echo "<script>
+            alert('Username หรือ Password ไม่ถูกต้อง\\n\\n\\nกรุณาลองใหม่อีกครั้ง!!');
+            window.location.href='/$projectName/pages/manage_login/login_form.php';
+            </script>";
+    }
+}
+
+$conn->close();
+
+function insertlog()
+{
+    require("../../_conn.php");
+    $sql = "INSERT INTO `login_log`(`datelogin`, `userlogin`, `levelLogin`) VALUES ('" . date('Y-m-d') . "','" . $_SESSION["Emp_id"] . "','" . $_SESSION["Emp_position"] . "')";
+    $result = mysqli_query($conn, $sql);
+}
+?>
