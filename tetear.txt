@@ -5,7 +5,7 @@ require("../layouts/_plugin.php");
 $uername = $_POST['txtusername'];
 $password = $_POST['txtpassword'];
 
-$sql = "SELECT * FROM `Employees` WHERE `Emp_username` = '".$uername."' AND `Emp_password` = '".$password."'";
+$sql = "SELECT * FROM `CooperativeDB`.`Employees` WHERE `Emp_username` = '".$uername."' AND `Emp_password` = '".$password."'";
 $result = mysqli_query($conn, $sql);
 
 $count = 0;
@@ -29,7 +29,7 @@ if (!$result) {
     }
 }
 
-$sql = "SELECT * FROM `Members` WHERE `Member_username` = '".$uername."' AND `Member_password` = '".$password."'";
+$sql = "SELECT * FROM `CooperativeDB`.`Members` WHERE `Member_username` = '".$uername."' AND `Member_password` = '".$password."'";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
