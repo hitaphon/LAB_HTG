@@ -1,16 +1,13 @@
 #!/bin/bash
 
-# ตัวแปร
-FTP_SERVER="192.168.3.130"
-FTP_USER="test"
-FTP_PASSWORD="ๅ/_ภ"
+FTP_SERVER="ftp.example.com"
+FTP_USER="your_username"
+FTP_PASSWORD="your_password"
 REMOTE_DIR="/remote/directory"
-LOCAL_DIR="/path/to/local/directory"
+LOCAL_DIR="/local/directory"
 
-# ลูป while เพื่อทำงานซ้ำทุก ๆ 1 นาที
 while true
 do
-    # เรียกใช้คำสั่ง ftp
     ftp -n $FTP_SERVER <<END_SCRIPT
     quote USER $FTP_USER
     quote PASS $FTP_PASSWORD
@@ -21,6 +18,5 @@ do
     quit
 END_SCRIPT
 
-    # หยุดรอ 1 นาที
-    sleep 60
+    sleep 30
 done
