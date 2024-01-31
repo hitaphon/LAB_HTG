@@ -1,0 +1,461 @@
+Version: admin1
+
+This is Admin with R1CH's security patches applied, and a couple tweaks
+to prevent kicking of players for false positives (Admin would think a
+player was a bot when they were merely lagging badly.)
+
+Original Admin readme.txt follows:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*******************************************************
+*                                                     *
+* admin v1                                            *
+* (c) Shane Powell 1999-2001                          *
+*                                                     *
+* Date: 18th August 2001                              *
+*                                                     *
+* ubuntu 18.04                                        *
+*                                                     *
+* http://www.bosstonelectronics.com/admin/            *
+*                                                     *
+*******************************************************
+
+
+Admin is a transparent proxy mod that adds many admin
+functions plus ZBot/Ratbot detection (including hacked 
+bots) to Quake2.  It works with all Quake2 mods transparently 
+by filtering communication between the server and the primary
+mod it is running on top of.
+
+
+
+Contents:
+
+1. Install.
+
+1.1. Windows Install.
+
+1.2. Linux Install.
+
+1.3. Alpha Linux Install.
+
+1.4. Solaris Install.
+
+2. Admin Commands and Setup.
+
+2.1. Admin Commands.
+
+2.2. q2admin.txt setup.
+
+2.3. Quake2 client admin.
+
+2.4. Quake2 Server admin.
+
+2.5. Admin command reference.
+
+2.5.1 "[LIKE/RE/CL] name" explained.
+
+2.6. Impulses explained.
+
+2.7. Advanced admin commands.
+
+2.7.1. Max Rate / Max fps.
+
+2.7.2. IP / Nick Banning.
+
+2.7.3. Limited rcon.
+
+2.7.4. Chat Flood Protection and Muting.
+
+2.8. play_ and say_ commands.
+
+2.8.1 play_all.
+
+2.8.2 play_team.
+
+2.8.3 play_person.
+
+2.8.4 say_person.
+
+2.8.5 say_group.
+
+2.8.6 extended say.
+
+2.9. Message of the Day (MOTD).
+
+2.10 disable spawning items.
+
+2.11 command voting.
+
+2.12 disable client commands.
+
+2.13 cl_pitchspeed and cl_anglespeedkey (Action Quake2 M4 Scripts)
+
+2.14 client side variable checking
+
+3. String preprocessing.
+
+4. Logging explained.
+
+5. Regular expressions.
+
+6. Trouble Shooting.
+
+7. Credits.
+
+8. Copyright and Distribution Permissions.
+
+9. Release History.
+
+
+
+
+
+1. Install
+----------
+
+1.1. Windows Install
+--------------------
+
+Installation for servers running Quake2 v3.20
+
+1. Shut down the Quake2 Server.
+
+2. Create a directory off the Quake2 root directory called 
+'release'
+
+3. Copy the gamex86.dll into the 'release' directory.
+
+4. Copy the following files into the Quake2 root directory 
+(wherever Quake2.exe is). 
+    q2admin.txt
+    q2adminban.txt
+    q2adminlog.txt
+    q2adminlrcon.txt
+    q2adminflood.txt
+    q2adminspawn.txt
+    q2adminvote.txt
+    q2admindisable.txt
+    q2admincheckvar.txt
+
+5. Start the server as usual.
+
+
+The  Q2Admin  prints it's version number out just before 
+the standard "==== InitGame ====" when the server starts.
+
+Q2Admin also prints out warning messages if the config 
+files can't be found.
+
+To enable overflow detection you must set logfile to 2 or
+3 on the server.  This is best done by adding it to your
+server.cfg file.
+
+
+
+
+Installation for servers running Quake2 up to v3.19
+
+1. Shut down the Quake2 Server.
+
+2. Copy the gamex86.dll and q2admin.txt into the Quake2 root
+directory (wherever Quake2.exe is). You shouldn't 
+be overwriting any mod files unless you already have a 
+seamless dll installed for another mod (I believe there is 
+a camera mod that is seamless).  You can only run one 
+seamless dll at a time.
+
+3. Start the server as usual.
+
+
+The  Q2Admin  prints it's version number out just before 
+the standard "==== InitGame ====" when the server starts.
+
+Q2Admin also prints out warning messages if the config 
+files can't be found.
+
+To enable overflow detection you must set logfile to 2 or
+3 on the server.  This is best done by adding it to your
+server.cfg file.
+
+
+
+
+1.2. Linux Install
+------------------
+
+
+PLEASE NOTE THAT Q2ADMIN ONLY RUNS WITH THE GLIBC VERSION
+OF QUAKE2 FOR LINUX.  It will run with the non-glibc 
+version but allot of features seam to be broken when
+running it with that version.  Use at your own risk.
+                                                    
+
+
+1. Shut down the Quake2 Server.
+
+2. Uncompress q2admin1.tar.gz into the Quake2 root
+directory.  e.g. "tar zxf q2admin1.tar.gz"
+
+3. For each mod that you want to protect, copy the 
+following files into the mod directory.
+    install
+    q2admin.so
+    q2admin.txt*
+    q2adminban.txt*
+    q2adminlog.txt*
+    q2adminlrcon.txt*
+    q2adminflood.txt*
+    q2adminspawn.txt*
+    q2adminvote.txt*
+    q2admindisable.txt*
+    q2admincheckvar.txt*
+
+*Optional. Use only if you want to customithe Q2Admin
+config for this particular mod rather than use the global
+Q2Admin config.
+
+4. Run "install" once. (e.g. ". ./install")
+
+5. Start the server as usual.
+
+The Q2Admin prints it's version number out just before 
+the standard "==== InitGame ====" when the server starts.
+
+Q2Admin also prints out warning messages if the config 
+files can't be found.
+
+
+The "install" script moves the old gamei386.so to 
+gamei386.real.so and moves q2admin.so gamei386.so.  
+If the install script is run again the files are moved 
+back to there original names.  This can be used to 
+uninstall or enable / disable the detect bot code.
+
+To enable overflow detection you must set logfile to 2 or
+3 on the server.  This is best done by adding it to your
+server.cfg file (v3.20 only).
+
+
+
+
+1.3. Alpha Linux Install
+------------------------
+
+
+1. Shut down the Quake2 Server.
+
+2. Uncompress q2adminaxp1.tar.gz into the Quake2 root
+directory.  e.g. "tar zxf q2adminaxp1.tar.gz"
+
+3. For each mod that you want to protect, copy the 
+following files into the mod directory.
+    install
+    q2admin.so
+    q2admin.txt*
+    q2adminban.txt*
+    q2adminlog.txt*
+    q2adminlrcon.txt*
+    q2adminflood.txt*
+    q2adminspawn.txt*
+    q2adminvote.txt*
+    q2admindisable.txt*
+    q2admincheckvar.txt*
+
+*Optional. Use only if you want to customize the Q2Admin
+config for this particular mod rather than use the global
+Q2Admin config.
+
+4. Run "install" once. (e.g. ". ./install")
+
+5. Start the server as usual.
+
+The Q2Admin prints it's version number out just before 
+the standard "==== InitGame ====" when the server starts.
+
+Q2Admin also prints out warning messages if the config 
+files can't be found.
+
+
+The "install" script moves the old gameaxp.so to 
+gameaxp.real.so and moves q2admin.so gameaxp.so.  
+If the install script is run again the files are moved 
+back to there original names.  This can be used to 
+uninstall or enable / disable the detect bot code.
+
+To enable overflow detection you must set logfile to 2 or
+3 on the server.  This is best done by adding it to your
+server.cfg file (v3.20 only).
+
+
+
+
+1.4. Solaris Install
+--------------------
+
+The Solaris port is done by the SolarEclipse.  Go check 
+them out for ports of other Quake2 mods to Solaris OS.
+
+http://www.planetquake.com/eclipse
+
+
+Intel Solaris OS:
+----------------
+
+1. Shut down the Quake2 Server.
+
+2. Uncompress q2admin1_solx86.tar.gz into the Quake2 root
+directory.  e.g. "tar zxf q2admin1_solx86.tar.gz"
+
+3. For each mod that you want to protect, copy the 
+following files into the mod directory.
+    install.ksh
+    q2admin.solx86.so
+    q2admin.txt*
+    q2adminban.txt*
+    q2adminlog.txt*
+    q2adminlrcon.txt*
+    q2adminflood.txt*
+    q2adminspawn.txt*
+    q2adminvote.txt*
+    q2admindisable.txt*
+    q2admincheckvar.txt*
+
+*Optional. Use only if you want to customize the Q2Admin
+config for this particular mod rather than use the global
+Q2Admin config.
+
+4. Run "install" once. (e.g. ". ./install")
+
+5. Start the server as usual.
+
+The Q2Admin prints it's version number out just before 
+the standard "==== InitGame ====" when the server starts.
+
+Q2Admin also prints out warning messages if the config 
+files can't be found.
+
+
+The "install" script moves the old gamei386.so to 
+gamei386.real.so and moves q2admin.solx86.so gamei386.so.  
+If the install script is run again the files are moved 
+back to there original names.  This can be used to 
+uninstall or enable / disable the detect bot code.
+
+To enable overflow detection you must set logfile to 2 or
+3 on the server.  This is best done by adding it to your
+server.cfg file (v3.20 only).
+
+
+
+Sparc Solaris OS:
+----------------
+
+1. Shut down the Quake2 Server.
+
+2. Uncompress q2admin1_sparc.tar.gz into the Quake2 root
+directory.  e.g. "tar zxf q2admin1_sparc.tar.gz"
+
+3. For each mod that you want to protect, copy the 
+following files into the mod directory.
+    install.ksh
+    q2admin.sparc.so
+    q2admin.txt*
+    q2adminban.txt*
+    q2adminlog.txt*
+    q2adminlrcon.txt*
+    q2adminflood.txt*
+    q2adminspawn.txt*
+    q2adminvote.txt*
+    q2admindisable.txt*
+    q2admincheckvar.txt*
+
+*Optional. Use only if you want to customize the Q2Admin
+config for this particular mod rather than use the global
+Q2Admin config.
+
+4. Run "install" once. (e.g. ". ./install")
+
+5. Start the server as usual.
+
+The Q2Admin prints it's version number out just before 
+the standard "==== InitGame ====" when the server starts.
+
+Q2Admin also prints out warning messages if the config 
+files can't be found.
+
+
+The "install" script moves the old gamesparc.so to 
+gamesparc.real.so and moves q2admin.sparc.so gamesparc.so.  
+If the install script is run again the files are moved 
+back to there original names.  This can be used to 
+uninstall or enable / disable the detect bot code.
+
+
+To enable overflow detection you must set logfile to 2 or
+3 on the server.  This is best done by adding it to your
+server.cfg file (v3.20 only).
+
+
+
+
+2. Admin commands and Setup
+---------------------------
+
+
+2.1. Admin commands
+-------------------
+
+There are 3 ways to use admin commands.
+
+1. In the q2admin.txt for initial configuration.
+2. In a Quake2 client connected to a server running Q2Admin.
+3. On the server console.
+
+
+
+2.2. q2admin.txt setup
+-------------------------
+
+The configuration file is automatically read from two places.
+It first reads q2admin.txt from the Quake2 directory then
+from the mod directory.
+
+Anyone wanting to make a configuration specific to a mod 
+can copy the q2admin.txt into the mod directory and 
+modify it for the requirements of that mod.
+
+If you run multiple servers from one mod directory you can
+use the command "+set q2admintxt <q2admin.txt-filename>"
+when starting a quake2 server. The q2amin.txt-file needs to
+be in the mod directory for this to work. For example:
+quake2 +set dedicated 1 +set q2admintxt q2admin_port27920.txt +exec ctfserver.cfg
+
+
+The format for the .txt file is as follows:
+
+Lines beginning with a ';' are comment lines and are 
+ignored. e.g.
+
+; this is a comment line.
+
+
+The standard layout for a config command is as follows:
+
+<command> "<value>"
+
+Note the value must always be in quotes.  e.g.
+
+adminpassword "secret"
+
+
+For a list of configuration commands see section 2.5.
+
+=====================================================================================
+
+2.13 How to the window Engineer 01
+hostname : virtual - world\engineer01
+ip : 10.62.2.51
+key : HelloMondayNaka
+pass : d0f0d8bc5ec05ea58e2e6ac569747a22
