@@ -1,6 +1,5 @@
 import ftplib
 import time
-import daemon
 
 def auto_login(host, username, password):
     try:
@@ -28,5 +27,4 @@ def main():
         time.sleep(30)
 
 if __name__ == "__main__":
-    with daemon.DaemonContext():
-        main()
+    main()
